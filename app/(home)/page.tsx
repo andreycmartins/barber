@@ -41,6 +41,16 @@ export default function Home() {
           <BarbershopItem key={barbershop.id} barbershop={barbershop} />
         ))}
       </div>
+
+      <div className="mt-6 mb-[4.5rem]">
+        <h2 className=" px-5 text-sm mb-3 uppercase text-gray-400 font-bol">Ppopulares</h2>
+      </div>
+
+      <div className="flex px-5 gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+        {barbershops.map((barbershop) => (
+          <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+        ))}
+      </div>
     </div> 
 
   );
