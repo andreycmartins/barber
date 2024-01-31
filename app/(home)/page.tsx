@@ -42,7 +42,7 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="mt-6 mb-[4.5rem]">
+      <div className="mt-6">
         <h2 className=" px-5 text-sm mb-3 uppercase text-gray-400 font-bol">Ppopulares</h2>
       </div>
 
