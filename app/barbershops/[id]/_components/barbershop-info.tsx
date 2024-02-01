@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/app/_components/ui/button";
-import { Barbershop } from "@prisma/client";
+import { Barbershop } from "@prisma/client/edge";
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

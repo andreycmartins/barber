@@ -1,6 +1,6 @@
 import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
-import { Service } from "@prisma/client";
+import { Service } from "@prisma/client/edge";
 import Image from "next/image";
 
 interface ServiceItemProps {

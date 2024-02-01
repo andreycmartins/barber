@@ -1,8 +1,9 @@
 import { db } from "@/app/_lib/prisma"
 import BarbershopInfo from "./_components/barbershop-info"
 import ServiceItem from "./_components/service-item"
+import { Service } from "@prisma/client/edge"
 
-const BarbershopDetailsPage = async ({params}: any) => {
+const BarbershopDetailsPage = async ({params}: Service) => {
   if (!params.id) {
     return null
   }
@@ -25,7 +26,7 @@ const BarbershopDetailsPage = async ({params}: any) => {
     <div>
       <BarbershopInfo barbershop={barbershop}/>
       <div className="px-5 flex flex-col gap-4 py-6">
-        {barbershop.services.map((service) => (
+        {barbershop.services.map((service: Service) => (
           <ServiceItem key={service.id} service={service}/>
         ))}
       </div>
