@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        domains: ['utfs.io', 'google.com', 'www.google.com', 'aquitemplacas.com.br', 'www.alternativagameselan.com.br'],
+  images: {
+    remotePatterns: [
+      {
+        hostname: "utfs.io"
+      },
+      {
+        hostname: "lh3.googleusercontent.com"
+      },
+    ],
   },
 };
 
