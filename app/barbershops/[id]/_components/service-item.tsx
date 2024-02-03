@@ -6,11 +6,16 @@ import { Card, CardContent } from "@/app/_components/ui/card";
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/app/_components/ui/sheet";
 import { Barbershop, Service } from "@prisma/client";
 import { ptBR } from "date-fns/locale";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import generateDayTimeList from "../_helpers/hours";
-import { format } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
+import saveBooking from "../_actions/save-bookings";
+import { Loader2 } from "lucide-react";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { ToastAction } from "@/app/_components/ui/toast";
+import { useRouter } from "next/navigation";
 
 interface ServiceItemProps {
   service: Service
@@ -18,9 +23,21 @@ interface ServiceItemProps {
   barbershop: Barbershop
 }
 
+interface User {
+  id: string
+  name: string
+  email: string
+  image: string
+}
+
 const ServiceItem = ({ service, isAuthenticated, barbershop }: ServiceItemProps) => {
-  const [date, setDate] = useState<Date | undefined>(undefined)
+  const { data: userData } = useSession()
+  const router = useRouter()
+  const [date, setSelectedDate] = useState<Date | undefined>(undefined)
   const [selectedHour, setSelectedHour] = useState<string | undefined>( )
+  const [submitIsLoading, setSubmitIsLoading] = useState(false)
+  const [sheetIsOpen, setSheetIsOpen] = useState(false)
+  const { toast } = useToast()
 
   const handleBookingClick = () => {
     if (!isAuthenticated) {
@@ -29,12 +46,53 @@ const ServiceItem = ({ service, isAuthenticated, barbershop }: ServiceItemProps)
   }
 
   const handleDateChange = (date: Date | undefined) => {
-    setDate(date)
+    setSelectedDate(date)
     setSelectedHour(undefined)
   }
 
   const handleSelectedHour = (time: string) => {
     setSelectedHour(time)
+  }
+
+  const handleBookingSubmit = async () => {
+    try {
+      if (!selectedHour || !date || !userData ) {
+        return
+      }
+
+      const dateHour = Number(selectedHour.split(':')[0])
+      const dateMinutes = Number(selectedHour.split(':')[1])
+      const newDate = setMinutes(setHours(date, dateHour), dateMinutes)
+      
+      setSubmitIsLoading(true)
+      await saveBooking({
+        serviceId: service.id,
+        barbershopId: barbershop.id,
+        date: newDate,
+        userId: (userData.user as User).id
+      })
+        setSubmitIsLoading(false)
+        setSelectedDate(undefined)
+        setSelectedHour(undefined)
+        toast({
+          title: "Reserva concluída",
+          description: format(newDate, "'Para' dd 'de' MMM 'às' HH':'mm'.'", {
+            locale: ptBR
+          }),
+          action: (
+            <div onClick={() => router.push('/bookings')}>
+              <ToastAction altText="Ok">Visualizar</ToastAction>
+            </div>
+          )
+        })
+        setSheetIsOpen(false)
+
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setSubmitIsLoading(false)
+      
+    }
   }
 
   const timeList = useMemo(() => {
@@ -66,7 +124,7 @@ const ServiceItem = ({ service, isAuthenticated, barbershop }: ServiceItemProps)
                   currency: "BRL",
                 }).format(Number(service.price))}
               </p>
-              <Sheet>
+              <Sheet open={sheetIsOpen} onOpenChange={() => {setSheetIsOpen(true)}}>
                 <SheetTrigger asChild>
                   <Button variant="secondary" onClick={handleBookingClick}>Reservar</Button>
                 </SheetTrigger>
@@ -153,7 +211,12 @@ const ServiceItem = ({ service, isAuthenticated, barbershop }: ServiceItemProps)
                   </div>
 
                   <SheetFooter className="px-3">
-                    <Button disabled={!selectedHour || !date}>Confirmar reserva</Button>
+                    <Button onClick={handleBookingSubmit} disabled={!selectedHour || !date || submitIsLoading}>
+                      {submitIsLoading && (  
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Confirmar reserva
+                      </Button>
                   </SheetFooter>
                 </SheetContent>
               </Sheet>
