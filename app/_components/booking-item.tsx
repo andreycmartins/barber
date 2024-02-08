@@ -18,8 +18,8 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
   return (
     <Card>
-      <CardContent className="p-5 flex py-0">
-        <div className="flex flex-col gap-2 py-5 flex-1">
+      <CardContent className="py-0 px-0 flex">
+        <div className="flex flex-col gap-2 py-5 flex-[3] px-5">
           <Badge className="bg-[#221C3D] text-primary hover:bg-[#221C3D] w-fit">Confirmado</Badge>
           <h2 className="font-bold">{booking.service.name}</h2>
 
