@@ -12,35 +12,48 @@ const BookingsPage = async () => {
 
   if (!session?.user) return redirect('/')
 
-  const bookings = await db.booking.findMany({
-    where: {
-      userId: (session.user as any).id
-    },
-    include: {
-      service: true,
-      barbershop: true,
-    }
-  })
+  const [confirmedBookings, finishedBookings] = await Promise.all([
+    db.booking.findMany({
+      where: {
+        userId: (session.user as any).id,
+        date: {
+          lt: new Date()
+        }
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      }
+    }),
 
-  const confirmedBookings = bookings.filter(booking => isFuture(booking.date))
-  const finishedBookings = bookings.filter(booking => isPast(booking.date))
+    db.booking.findMany({
+      where: {
+        userId: (session.user as any).id,
+        date: {
+          gte: new Date()
+        }
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      }
+    }),
+  ])
 
   return ( 
       <>
         <Header />
 
-        <div>
-          <h1 className="text-xl">Agendamentos</h1>
+        <div className="">
+          <h1 className="text-xl pl-5 mb-3 uppercase font-bold">Agendamentos</h1>
 
-          <h2 className="text-gray-400 uppercase font-bold text-sm my-6 mb-3">Confirmados</h2>
-
-          <div className="flex flex-col gap-3">
+          <h2 className="mt-6 px-5 text-xs mb-3 uppercase text-gray-400 font-bold">Confirmados</h2>
+          <div className="px-5 mb-3 flex flex-col gap-3">
             {confirmedBookings.map(booking => <BookingItem booking={booking} key={booking.id} />)}
           </div>
 
-          <h2 className="text-gray-400 uppercase font-bold text-sm my-6 mb-3">Finalizados</h2>
-
-          <div className="flex flex-col gap-3">
+          <h2 className="px-5 text-xs mb-3 uppercase text-gray-400 font-bold">Finalizados</h2>
+          <div className="px-5 mb-3 flex flex-col gap-3">
             {finishedBookings.map(booking => <BookingItem booking={booking} key={booking.id} />)}
           </div>
 
