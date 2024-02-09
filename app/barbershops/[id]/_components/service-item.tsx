@@ -101,6 +101,12 @@ const ServiceItem = ({ service, isAuthenticated, barbershop }: ServiceItemProps)
         setSheetIsOpen(false)
 
     } catch (error) {
+      toast({
+        title: String(error),
+        style: {
+          backgroundColor: 'red'
+        }
+      })
       console.log(error)
     } finally {
       setSubmitIsLoading(false)
@@ -158,7 +164,7 @@ const ServiceItem = ({ service, isAuthenticated, barbershop }: ServiceItemProps)
                   currency: "BRL",
                 }).format(Number(service.price))}
               </p>
-              <Sheet open={sheetIsOpen} onOpenChange={() => {setSheetIsOpen(true)}}>
+              <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="secondary" onClick={handleBookingClick}>Reservar</Button>
                 </SheetTrigger>

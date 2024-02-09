@@ -1,11 +1,9 @@
 import { getServerSession } from "next-auth";
 import Header from "../_components/header";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { db } from "../_lib/prisma";
 import BookingItem from "../_components/booking-item";
-import { isFuture, isPast } from "date-fns";
 
 const BookingsPage = async () => {
   const session = await getServerSession(authOptions)
@@ -47,14 +45,16 @@ const BookingsPage = async () => {
         <div className="">
           <h1 className="text-xl pl-5 mb-3 uppercase font-bold">Agendamentos</h1>
 
-          <h2 className="mt-6 px-5 text-xs mb-3 uppercase text-gray-400 font-bold">Confirmados</h2>
+          {confirmedBookings.length > 0 && (
+            <h2 className="mt-6 px-5 text-xs mb-3 uppercase text-gray-400 font-bold">Confirmados</h2>
+          )}
           <div className="px-5 mb-3 flex flex-col gap-3">
-            {confirmedBookings.map(booking => <BookingItem booking={booking} key={booking.id} />)}
+            {finishedBookings.map(booking => <BookingItem booking={booking} key={booking.id} />)}
           </div>
 
           <h2 className="px-5 text-xs mb-3 uppercase text-gray-400 font-bold">Finalizados</h2>
           <div className="px-5 mb-3 flex flex-col gap-3">
-            {finishedBookings.map(booking => <BookingItem booking={booking} key={booking.id} />)}
+            {confirmedBookings.map(booking => <BookingItem booking={booking} key={booking.id} />)}
           </div>
 
         </div>
