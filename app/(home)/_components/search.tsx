@@ -15,15 +15,16 @@ const formSchema = z.object({
   }).trim().min(1, "Campo obrigatório").max(50),
 })
 
+interface SearchProps {
+  defaultValues?: z.infer<typeof formSchema>
+}
 
-const Search = () => {
+const Search = ({ defaultValues }: SearchProps) => {
   const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      search: "",
-    },
+    defaultValues: defaultValues,
   })
 
   function handleSubmit(data: z.infer<typeof formSchema>) {

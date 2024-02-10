@@ -35,7 +35,11 @@ export default async function BarbershopsPage({searchParams}: BarbershopsPagePro
         </Link> 
 
         <div className="my-3">
-          <Search />
+          <Search
+            defaultValues={{
+              search: searchParams.search || ""
+            }}
+          />
         </div>
 
         <h1 className="text-gray-400 font-bold text-xs uppercase">Resultados para {searchParams.search}</h1>
