@@ -3,7 +3,7 @@
 import { Button } from "@/app/_components/ui/button";
 import { Calendar } from "@/app/_components/ui/calendar";
 import { Card, CardContent } from "@/app/_components/ui/card";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/app/_components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/app/_components/ui/sheet";
 import { Barbershop, Booking, Service } from "@prisma/client";
 import { ptBR } from "date-fns/locale";
 import { signIn, useSession } from "next-auth/react";
@@ -251,12 +251,17 @@ const ServiceItem = ({ service, isAuthenticated, barbershop }: ServiceItemProps)
                   </div>
 
                   <SheetFooter className="px-3">
-                    <Button onClick={handleBookingSubmit} disabled={!selectedHour || !date || submitIsLoading}>
-                      {submitIsLoading && (  
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      Confirmar reserva
-                      </Button>
+                    <div className="flex flex-row gap-3 justify-between">
+                      <SheetClose asChild>
+                        <Button className="w-40" variant="secondary">Voltar</Button>
+                      </SheetClose>
+                      <Button className="flex-grow" onClick={handleBookingSubmit} disabled={!selectedHour || !date || submitIsLoading}>
+                        {submitIsLoading && (  
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        Confirmar reserva
+                        </Button>
+                    </div>
                   </SheetFooter>
                 </SheetContent>
               </Sheet>
