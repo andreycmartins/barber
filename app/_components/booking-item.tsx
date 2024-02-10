@@ -92,7 +92,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
         </Card>
       </SheetTrigger>
 
-      <SheetContent className="px-0">
+      <SheetContent className="px-0 w-full">
         <SheetHeader className="px-5 text-left pb-6 border-b border-solid border-secondary">
           <SheetTitle>Informações da Reserva</SheetTitle>
         </SheetHeader>
@@ -139,7 +139,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                   </p>
                 </div>
               )}
-              <div className="flex justify-between py-1">
+              <div className="flex justify-between py-1 border-b border-solid border-secondary">
                 <p className="text-gray-400 text-sm">Horário</p>
                 <p className="text-gray-400 text-sm">{format(booking.date, "hh:mm")}</p>
               </div>
