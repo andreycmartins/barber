@@ -3,11 +3,16 @@ import BarbershopInfo from "./_components/barbershop-info";
 import ServiceItem from "./_components/service-item";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_lib/auth";
+import { Metadata } from "next";
 
 interface BarbershopDetailsPageProps {
   params: {
     id?: string;
   };
+}
+
+export const metadata: Metadata = {
+  title: 'Barbers',
 }
 
 const BarbershopDetailsPage = async ({ params }: BarbershopDetailsPageProps) => {

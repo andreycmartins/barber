@@ -4,6 +4,11 @@ import { authOptions } from "../_lib/auth"
 import { redirect } from "next/navigation"
 import { db } from "../_lib/prisma"
 import BookingItem from "../_components/booking-item"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: 'Barbers',
+}
 
 const BookingsPage = async () => {
   const session = await getServerSession(authOptions)

@@ -7,6 +7,11 @@ import { db } from "../_lib/prisma";
 import BarbershopItem from "./_components/barbershop-item";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../_lib/auth";
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Barbers',
+}
 
 export default async function Home() {
   const session = await getServerSession(authOptions)

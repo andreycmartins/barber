@@ -4,13 +4,17 @@ import Header from "../_components/header"
 import { Button } from "../_components/ui/button"
 import { db } from "../_lib/prisma"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import Search from "../(home)/_components/search"
+import type { Metadata } from 'next'
 
 interface BarbershopsPageProps {
   searchParams: {
     search?: string
   }
+}
+
+export const metadata: Metadata = {
+  title: 'Barbers',
 }
 
 export default async function BarbershopsPage({searchParams}: BarbershopsPageProps) {
