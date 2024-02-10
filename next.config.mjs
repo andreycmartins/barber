@@ -10,6 +10,9 @@ const nextConfig = {
       },
     ],
   },
+  serverRuntimeConfig: {
+    prisma,
+  },
 };
 
 export default nextConfig;
