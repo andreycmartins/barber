@@ -158,12 +158,11 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button className="w-full" variant="destructive" disabled={submitIsLoading}>
-                {submitIsLoading && (  
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {!isBookingConfirmed && (
+                  <Button className="w-full" variant="destructive" disabled={submitIsLoading}>
+                  Cancelar reserva
+                  </Button>
                 )}
-                Cancelar reserva
-                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent className="w-[90%]">
                 <AlertDialogHeader>

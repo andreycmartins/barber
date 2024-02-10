@@ -10,7 +10,7 @@ const BookingsPage = async () => {
 
   if (!session?.user) return redirect('/')
 
-  const [confirmedBookings, finishedBookings] = await Promise.all([
+  const [finishedBookings, confirmedBookings] = await Promise.all([
     db.booking.findMany({
       where: {
         userId: (session.user as any).id,
