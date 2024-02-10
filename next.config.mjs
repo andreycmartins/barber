@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
+
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+
 const nextConfig = {
   images: {
     remotePatterns: [
