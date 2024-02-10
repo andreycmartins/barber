@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
-
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -13,9 +10,6 @@ const nextConfig = {
         hostname: "lh3.googleusercontent.com"
       },
     ],
-  },
-  serverRuntimeConfig: {
-    prisma,
   },
 };
 
