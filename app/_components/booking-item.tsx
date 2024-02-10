@@ -13,6 +13,17 @@ import { cancelBooking } from "../_actions/cancel-booking";
 import { useToast } from "./ui/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -26,7 +37,6 @@ interface BookingItemProps {
 const BookingItem = ({ booking }: BookingItemProps) => {
   const isBookingConfirmed = isPast(booking.date)
   const [submitIsLoading, setSubmitIsLoading] = useState(false)
-  const [sheetIsOpen, setSheetIsOpen] = useState(false)
 
   const { toast } = useToast()
 
@@ -41,8 +51,6 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           backgroundColor: 'green'
         }
       })
-      setSubmitIsLoading(false)
-      setSheetIsOpen(false)
     } catch (error){
       toast({
         title: 'Não foi possível deletar a reserva...',
@@ -147,12 +155,31 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             <SheetClose asChild>
               <Button className="w-full" variant="secondary">Voltar</Button>
             </SheetClose>
-            <Button className="w-full" variant="destructive" disabled={submitIsLoading} onClick={handleCancelClick}>
-              {submitIsLoading && (  
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Cancelar reserva
-              </Button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="w-full" variant="destructive" disabled={submitIsLoading}>
+                {submitIsLoading && (  
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Cancelar reserva
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="w-[90%]">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Cancelar reserva de {booking.service.name}?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Uma vez cancelada, não será possível reverter essa ação.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex flex-row justify-between items-end gap-3">
+                  <AlertDialogCancel className="w-full">Voltar</AlertDialogCancel>
+                  <AlertDialogAction disabled={submitIsLoading} className="w-full" onClick={handleCancelClick}>
+                    Confirmar
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </SheetFooter>
         </div>
       </SheetContent>
