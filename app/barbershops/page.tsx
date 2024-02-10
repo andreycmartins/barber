@@ -5,6 +5,7 @@ import { Button } from "../_components/ui/button"
 import { db } from "../_lib/prisma"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import Search from "../(home)/_components/search"
 
 interface BarbershopsPageProps {
   searchParams: {
@@ -32,6 +33,11 @@ export default async function BarbershopsPage({searchParams}: BarbershopsPagePro
             Voltar
           </Button>
         </Link> 
+
+        <div className="my-3">
+          <Search />
+        </div>
+
         <h1 className="text-gray-400 font-bold text-xs uppercase">Resultados para {searchParams.search}</h1>
 
         <div className="grid grid-cols-2 mt-3 gap-4">
