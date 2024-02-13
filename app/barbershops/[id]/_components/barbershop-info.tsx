@@ -1,38 +1,51 @@
-"use client";
+'use client'
 
-import SideMenu from "@/app/_components/side-menu";
-import { Button } from "@/app/_components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/app/_components/ui/sheet";
-import { Barbershop } from "@prisma/client";
-import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import SideMenu from '@/app/_components/side-menu'
+import { Button } from '@/app/_components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/app/_components/ui/sheet'
+import { Barbershop } from '@prisma/client'
+import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 interface BarbershopInfoProps {
-  barbershop: Barbershop;
+  barbershop: Barbershop
 }
 
 const BarbershopInfo = ({ barbershop }: BarbershopInfoProps) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleBackClick = () => {
-    router.replace("/");
-  };
+    router.replace('/')
+  }
 
   return (
     <div>
       <div className="h-[250px] w-full relative">
-        <Button onClick={handleBackClick} size="icon" variant="outline" className="z-50 absolute top-4 left-4">
+        <Button
+          onClick={handleBackClick}
+          size="icon"
+          variant="outline"
+          className="z-50 absolute top-4 left-4"
+        >
           <ChevronLeftIcon />
         </Button>
 
-        <Button size="icon" variant="outline" className="z-50 absolute top-4 right-4">
+        <Button
+          size="icon"
+          variant="outline"
+          className="z-50 absolute top-4 right-4"
+        >
           <MenuIcon />
         </Button>
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button size="icon" variant="outline" className="z-50 absolute top-4 right-4">
+            <Button
+              size="icon"
+              variant="outline"
+              className="z-50 absolute top-4 right-4"
+            >
               <MenuIcon />
             </Button>
           </SheetTrigger>
@@ -42,13 +55,12 @@ const BarbershopInfo = ({ barbershop }: BarbershopInfoProps) => {
           </SheetContent>
         </Sheet>
 
-
         <Image
           src={barbershop.imageUrl}
           fill
           alt={barbershop.name}
           style={{
-            objectFit: "cover",
+            objectFit: 'cover',
           }}
           className="opacity-75"
         />
@@ -66,7 +78,7 @@ const BarbershopInfo = ({ barbershop }: BarbershopInfoProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BarbershopInfo;
+export default BarbershopInfo

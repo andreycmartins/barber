@@ -1,4 +1,4 @@
-import { addMinutes, format, setHours, setMinutes } from "date-fns";
+import { addMinutes, format, setHours, setMinutes } from 'date-fns'
 
 const generateDayTimeList = (date: Date): string[] => {
   const startTime = setMinutes(setHours(date, 9), 0)
@@ -8,12 +8,12 @@ const generateDayTimeList = (date: Date): string[] => {
 
   let currentTime = startTime
 
-  while (currentTime <= endTime){
-    timeList.push(format(currentTime, "HH:mm"))
+  while (currentTime <= endTime) {
+    timeList.push(format(currentTime, 'HH:mm'))
     currentTime = addMinutes(currentTime, interval)
   }
 
   return timeList
 }
- 
-export default generateDayTimeList;
+
+export default generateDayTimeList

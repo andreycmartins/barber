@@ -1,18 +1,28 @@
-"use client"
+'use client'
 
-import { Button } from "@/app/_components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/app/_components/ui/form"
-import { Input } from "@/app/_components/ui/input"
-import { SearchIcon } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
+import { Button } from '@/app/_components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/app/_components/ui/form'
+import { Input } from '@/app/_components/ui/input'
+import { SearchIcon } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
-  search: z.string({
-    required_error: "Campo obrigatório"
-  }).trim().min(1, "Campo obrigatório").max(50),
+  search: z
+    .string({
+      required_error: 'Campo obrigatório',
+    })
+    .trim()
+    .min(1, 'Campo obrigatório')
+    .max(50),
 })
 
 interface SearchProps {
@@ -24,7 +34,7 @@ const Search = ({ defaultValues }: SearchProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: defaultValues,
+    defaultValues,
   })
 
   function handleSubmit(data: z.infer<typeof formSchema>) {
@@ -34,12 +44,14 @@ const Search = ({ defaultValues }: SearchProps) => {
   return (
     <div className="flex items-center gap-2">
       <Form {...form}>
-        <form className="flex w-full gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
-
+        <form
+          className="flex w-full gap-4"
+          onSubmit={form.handleSubmit(handleSubmit)}
+        >
           <FormField
             control={form.control}
             name="search"
-            render={({field}) => (
+            render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
                   <Input placeholder="Busque por uma barbearia..." {...field} />
@@ -48,7 +60,7 @@ const Search = ({ defaultValues }: SearchProps) => {
               </FormItem>
             )}
           />
-          
+
           <Button variant="default" type="submit">
             <SearchIcon size={20} />
           </Button>

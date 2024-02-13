@@ -1,12 +1,12 @@
-import { format } from "date-fns";
-import Header from "../_components/header";
-import { ptBR } from "date-fns/locale";
-import Search from "./_components/search";
-import BookingItem from "../_components/booking-item";
-import { db } from "../_lib/prisma";
-import BarbershopItem from "./_components/barbershop-item";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../_lib/auth";
+import { format } from 'date-fns'
+import Header from '../_components/header'
+import { ptBR } from 'date-fns/locale'
+import Search from './_components/search'
+import BookingItem from '../_components/booking-item'
+import { db } from '../_lib/prisma'
+import BarbershopItem from './_components/barbershop-item'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../_lib/auth'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -16,22 +16,32 @@ export const metadata: Metadata = {
 export default async function Home() {
   const session = await getServerSession(authOptions)
 
-  const [barbershops, confirmedBookings] = await Promise.all([
-    db.barbershop.findMany({}),
+  const [barbershops, orderedByIdBarbershops, confirmedBookings] =
+    await Promise.all([
+      db.barbershop.findMany({}),
 
-    session?.user ? await db.booking.findMany({
-      where: {
-        userId: (session.user as any).id,
-        date: {
-          gte: new Date()
-        }
-      },
-      include: {
-        service: true,
-        barbershop: true,
-      }
-    }) : Promise.resolve([])
-  ])
+      db.barbershop.findMany({
+        orderBy: {
+          id: 'asc',
+        },
+      }),
+
+      session?.user
+        ? await db.booking.findMany({
+            where: {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              userId: (session.user as any).id,
+              date: {
+                gte: new Date(),
+              },
+            },
+            include: {
+              service: true,
+              barbershop: true,
+            },
+          })
+        : Promise.resolve([]),
+    ])
 
   return (
     <div>
@@ -58,19 +68,25 @@ export default async function Home() {
 
       {confirmedBookings.length > 0 && (
         <div className="mt-6">
-          <h2 className="text-xs pl-5 mb-3 uppercase text-gray-400 font-bold">Agendamentos</h2>
+          <h2 className="text-xs pl-5 mb-3 uppercase text-gray-400 font-bold">
+            Agendamentos
+          </h2>
 
           <div className="flex gap-3 px-5 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-            {confirmedBookings.map(booking => <BookingItem key={booking.id} booking={booking}/>)}
+            {confirmedBookings.map((booking) => (
+              <BookingItem key={booking.id} booking={booking} />
+            ))}
           </div>
         </div>
       )}
 
       <div className="mt-6">
-        <h2 className="px-5 text-xs mb-3 uppercase text-gray-400 font-bold">Recomendados</h2>
+        <h2 className="px-5 text-xs mb-3 uppercase text-gray-400 font-bold">
+          Recomendados
+        </h2>
         <div className="flex px-5 gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {barbershops.map((barbershop) => (
-            <div className="min-w-[167px] max-w-[167px]:" key={barbershop.id} >
+          {orderedByIdBarbershops.map((barbershop) => (
+            <div className="min-w-[167px] max-w-[167px]:" key={barbershop.id}>
               <BarbershopItem barbershop={barbershop} />
             </div>
           ))}
@@ -78,15 +94,17 @@ export default async function Home() {
       </div>
 
       <div className="mt-6 mb-[4.5rem]">
-        <h2 className="px-5 text-xs mb-3 uppercase text-gray-400 font-bold">Populares</h2>
+        <h2 className="px-5 text-xs mb-3 uppercase text-gray-400 font-bold">
+          Populares
+        </h2>
         <div className="flex px-5 gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {barbershops.map((barbershop) => (
-            <div className="min-w-[167px] max-w-[167px]:" key={barbershop.id} >
+            <div className="min-w-[167px] max-w-[167px]:" key={barbershop.id}>
               <BarbershopItem barbershop={barbershop} />
             </div>
           ))}
         </div>
       </div>
     </div>
-  );
+  )
 }
